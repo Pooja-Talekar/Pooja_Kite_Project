@@ -1,7 +1,6 @@
-package dashBoard;
+package FundModule;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
@@ -16,17 +15,16 @@ import pomClasses.FundPage;
 import pomClasses.HomePage;
 import pomClasses.LoginPage;
 
-public class VerifyUserCanAddStocksToWatchList {
-
-WebDriver driver;
+public class VerifyUserCanAddFunds {
+	
+	WebDriver driver;
 	
 	LoginPage lp;
 	HomePage hp;
 	FundPage fp;
 	
 	@BeforeClass
-	public void beforeClass() throws IOException
-	{
+	public void beforeClass() throws IOException {
 		driver = Base1.getDriver();
 	}
 	
@@ -48,24 +46,33 @@ WebDriver driver;
 	}
 	
 	
-	@Test(priority=2)
-	public void VerifyUserCanSearchProductAndGetList() {
+	@Test(priority=2, dependsOnMethods="VerifyUserCanLogin")
+	public void VerifyUserCanOpenFundWindow() throws IOException {
+		hp.clickOnFundText();
+		Assert.assertTrue(fp.checkForFundPage());
+	}
+	
+	
+	@Test(priority=3, dependsOnMethods="VerifyUserCanLogin")
+	public void VerifyUserCanOpenDepositeFundWindow() throws IOException {
+		fp.clickOnAddFund();
+		Assert.assertTrue(fp.checkForDepositePage());	
+	}
+	
+	
+	@Test(priority=4, dependsOnMethods="VerifyUserCanLogin")
+	public void VerifyUserCanFillDepositeDetailsAdnContinue() throws IOException {
+		String amountToDeposite = "10";
+		fp.addDepositeAmount(amountToDeposite);
+		fp.enterUPI();
+		fp.clickOnContinueBtn();
 		
-		hp.searchStocks();
-		Assert.assertTrue(hp.getSearchedStockListAndValidate());
+		Assert.assertTrue(fp.checkForConfirmationAmount());
+		
+		Assert.assertEquals(fp.getDepositeConfirmationAmount(), amountToDeposite);
+		
 	}
 	
-	
-	@Test(priority=3)
-	public void VerifyUserCanClickOnAddButton() {
-		Assert.assertEquals(hp.clickOnAddToWatchListButton(), "Added");
-	}
-	
-	
-	@Test(priority=4)
-	public void VerifySearchedStockIsAddedInWatchList() {
-		Assert.assertEquals(hp.getWatchListStock(), "TATAMOTORS");
-	}
 	
 	
 	@AfterMethod
@@ -79,4 +86,5 @@ WebDriver driver;
 	}
 	
 	
+
 }

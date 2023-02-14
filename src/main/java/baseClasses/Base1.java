@@ -12,9 +12,9 @@ import org.testng.Reporter;
 
 public class Base1 
 {
-	protected WebDriver driver;
+	protected static WebDriver driver;
 	  
-	  public WebDriver getDriver() throws IOException 
+	  public static WebDriver getDriver() throws IOException 
 	  {
 		  System.setProperty("webdriver.chrome.driver","E:\\Velocity Study Material\\IMP Software\\chromedriver_win32\\chromedriver.exe");
 		  driver=new ChromeDriver();
